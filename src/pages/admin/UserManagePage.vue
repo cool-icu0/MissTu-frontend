@@ -8,6 +8,17 @@
       <a-form-item label="用户名">
         <a-input v-model:value="searchParams.userName" placeholder="输入用户名" allow-clear />
       </a-form-item>
+      <a-form-item label="角色">
+        <a-select
+          v-model:value="searchParams.userRole"
+          placeholder="选择角色"
+          allow-clear
+        >
+          <a-select-option value="admin">管理员</a-select-option>
+          <a-select-option value="user">普通用户</a-select-option>
+          <!-- 可以根据需要添加更多的角色选项 -->
+        </a-select>
+      </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">搜索</a-button>
       </a-form-item>
@@ -36,17 +47,79 @@
           {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template v-else-if="column.key === 'action'">
-          <a-button danger @click="doDelete(record.id)">删除</a-button>
+
+          <a-button type="primary" @click="showEditModal(record.id)">修改</a-button>
+
+          <span width="20px">&nbsp;&nbsp;&nbsp;</span>
+
+          <a-popconfirm
+            danger
+            v-if="dataList.length"
+            title="确认删除该条数据?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="doDelete(record.id)"
+          >
+            <a-button danger>删除</a-button>
+          </a-popconfirm>
         </template>
       </template>
     </a-table>
+
+    <!-- 编辑用户信息的模态框 -->
+    <a-modal
+      v-model:visible="editModalVisible"
+      title="编辑用户信息"
+      @ok="handleEditModalOk"
+      @cancel="handleEditModalCancel"
+    >
+      <a-form :model="editUser">
+        <a-form-item label="账号">
+          <a-input v-model:value="editUser.userAccount" disabled />
+        </a-form-item>
+        <a-form-item label="用户名">
+          <a-input v-model:value="editUser.userName" />
+        </a-form-item>
+        <a-form-item label="头像">
+          <a-input v-model:value="editUser.userAvatar" />
+        </a-form-item>
+        <a-form-item label="简介">
+          <a-input v-model:value="editUser.userProfile" />
+        </a-form-item>
+        <a-form-item label="用户角色">
+          <a-select v-model:value="editUser.userRole">
+            <a-select-option value="admin">管理员</a-select-option>
+            <a-select-option value="user">普通用户</a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref } from 'vue'
-import { deleteUserUsingPost, listUserVoByPageUsingPost } from '@/api/userController.ts'
+import {
+  deleteUserUsingPost,
+  listUserVoByPageUsingPost,
+  updateUserUsingPost,
+} from '@/api/userController.ts'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
+const editModalVisible = ref(false) // 控制编辑模态框的显示
+let editUser:API.UserVO = reactive({
+  id: 0,
+  userAccount: '',
+  userName: '',
+  userAvatar: '',
+  userProfile: '',
+  userRole: '',
+  // createTime:''
+})
+interface Page{
+  current:1,
+  pageSize:10,
+}
+
 const columns = [
   {
     title: 'id',
@@ -114,11 +187,11 @@ const pagination = computed(() => {
     pageSize: searchParams.pageSize,
     total: total.value,
     showSizeChanger: true,
-    showTotal: (total) => `共 ${total} 条`,
+    showTotal: (total:number) => `共 ${total} 条`,
   }
 })
 // 表格变化之后，重新获取数据
-const doTableChange = (page: any) => {
+const doTableChange = (page: Page) => {
   searchParams.current = page.current
   searchParams.pageSize = page.pageSize
   fetchData()
@@ -129,8 +202,41 @@ const doSearch = () => {
   searchParams.current = 1
   fetchData()
 }
+//修改数据
+// 显示编辑模态框，并填充数据
+const showEditModal = (id: number) => {
+  console.log('dataList', dataList.value)
+  for (const key in dataList.value) {
+    if (dataList.value[key].id === id) {
+      editUser = dataList.value[key]
+    }
+  }
+  editModalVisible.value = true
+}
+// 处理编辑模态框的确认事件
+const handleEditModalOk = () => {
+  doChange(editUser)
+  editModalVisible.value = false
+}
+
+// 处理编辑模态框的取消事件
+const handleEditModalCancel = () => {
+  editModalVisible.value = false
+}
+//修改数据
+const doChange = async (editUser: API.User) => {
+  const res = await updateUserUsingPost(editUser)
+  if (res.data.code === 0) {
+    message.success('修改成功')
+    // 刷新数据
+    fetchData()
+  } else {
+    message.error('修改失败')
+  }
+}
 // 删除数据
-const doDelete = async (id: string) => {
+
+const doDelete = async (id: number) => {
   if (!id) {
     return
   }

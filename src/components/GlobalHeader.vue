@@ -26,6 +26,10 @@
             </ASpace>
             <template #overlay>
               <a-menu>
+                <a-menu-item @click="doUserCenter">
+                  <LogoutOutlined />
+                  个人中心
+                </a-menu-item>
                 <a-menu-item @click="doLogout">
                   <LogoutOutlined />
                   退出登录
@@ -115,6 +119,11 @@ const doLogout = async () => {
   } else {
     message.error('退出登录失败，' + res.data.message)
   }
+}
+const doUserCenter = async ()=>{
+  // router.push('/user/center')
+  //todo 待完成
+  console.log("个人中心")
 }
 </script>
 <style scoped>
