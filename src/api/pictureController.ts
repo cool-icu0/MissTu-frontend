@@ -92,6 +92,21 @@ export async function listPictureVoByPageUsingPost(
   })
 }
 
+/** doPictureReview POST /api/review */
+export async function doPictureReviewUsingPost(
+  body: API.PictureReviewRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/review', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** listPictureTagCategory GET /api/tag_category */
 export async function listPictureTagCategoryUsingGet(options?: { [key: string]: any }) {
   return request<API.BaseResponsePictureTagCategory_>('/api/tag_category', {
@@ -152,6 +167,21 @@ export async function uploadPictureUsingPost(
     },
     data: formData,
     requestType: 'form',
+    ...(options || {}),
+  })
+}
+
+/** uploadPictureByUrl POST /api/upload/url */
+export async function uploadPictureByUrlUsingPost(
+  body: API.PictureUploadRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePictureVO_>('/api/upload/url', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   })
 }

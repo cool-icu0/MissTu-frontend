@@ -107,7 +107,7 @@ const fetchData = async () => {
   const res = await listPictureVoByPageUsingPost(params)
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data.records ?? []
-    total.value = res.data.data.total ?? 0
+    total.value = Number(res.data.data.total)  ?? 0
   } else {
     message.error('获取数据失败，' + res.data.message)
   }
@@ -124,7 +124,7 @@ const pagination = computed(() => {
   return {
     current: searchParams.current,
     pageSize: searchParams.pageSize,
-    total: total.value,
+    total: total.value ?? 0,
     onChange: (page: number, pageSize: number) => {
       searchParams.current = page
       searchParams.pageSize = pageSize

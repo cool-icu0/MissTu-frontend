@@ -27,7 +27,7 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item @click="doUserCenter">
-                  <LogoutOutlined />
+                  <InfoCircleTwoTone />
                   个人中心
                 </a-menu-item>
                 <a-menu-item @click="doLogout">
@@ -49,6 +49,7 @@
 import { computed, h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
 import { MenuProps, message } from 'ant-design-vue'
+import { LogoutOutlined,InfoCircleTwoTone } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { userLogoutUsingPost } from '@/api/userController.ts'
