@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '@/pages/HomePage.vue'
-import UserLoginPage from '@/pages/user/UserLoginPage.vue'
-import UserRegisterPage from '@/pages/user/UserRegisterPage.vue'
-import UserManagePage from '@/pages/admin/UserManagePage.vue'
-import AddPicturePage from '@/pages/picture/AddPicturePage.vue'
-import PictureManagePage from '@/pages/picture/PictureManagePage.vue'
-import PictureDetailPage from '@/pages/picture/PictureDetailPage.vue'
-import AddPictureBatchPage from '@/pages/picture/AddPictureBatchPage.vue'
-import SpaceManagePage from '@/pages/space/SpaceManagePage.vue'
-import AddSpacePage from '@/pages/space/AddSpacePage.vue'
+import HomePage from '@/views/Home.vue'
+import UserLoginPage from '@/views/user/UserLogin.vue'
+import UserRegisterPage from '@/views/user/UserRegister.vue'
+import UserManagePage from '@/views/admin/UserManage.vue'
+import AddPicturePage from '@/views/picture/AddPicture.vue'
+import PictureManagePage from '@/views/picture/PictureManage.vue'
+import PictureDetailPage from '@/views/picture/PictureDetail.vue'
+import AddPictureBatchPage from '@/views/picture/AddPictureBatchPage.vue'
+import SpaceManagePage from '@/views/space/SpaceManage.vue'
+import AddSpacePage from '@/views/space/AddSpace.vue'
+import SpaceDetailPage from '@/views/space/SpaceDetail.vue'
+import UserSpacePage from '@/views/space/UserSpace.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +65,17 @@ const router = createRouter({
       path: '/add_space',
       name: '创建空间',
       component: AddSpacePage,
+    },
+    {
+      path: '/my_space',
+      name: '我的空间',
+      component: UserSpacePage,
+    },
+    {
+      path: '/space/:id',
+      name: '空间详情',
+      component: SpaceDetailPage,
+      props: true,
     },
   ],
 })

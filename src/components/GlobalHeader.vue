@@ -30,6 +30,12 @@
                   <InfoCircleTwoTone />
                   个人中心
                 </a-menu-item>
+                <a-menu-item>
+                  <router-link to="/my_space">
+                    <UserOutlined />
+                    我的空间
+                  </router-link>
+                </a-menu-item>
                 <a-menu-item @click="doLogout">
                   <LogoutOutlined />
                   退出登录
@@ -49,7 +55,7 @@
 import { computed, h, ref } from 'vue'
 import { HomeOutlined } from '@ant-design/icons-vue'
 import { MenuProps, message } from 'ant-design-vue'
-import { LogoutOutlined,InfoCircleTwoTone } from '@ant-design/icons-vue';
+import { LogoutOutlined, UserOutlined, InfoCircleTwoTone } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import { userLogoutUsingPost } from '@/api/userController.ts'
@@ -136,10 +142,10 @@ const doLogout = async () => {
     message.error('退出登录失败，' + res.data.message)
   }
 }
-const doUserCenter = async ()=>{
+const doUserCenter = async () => {
   // router.push('/user/center')
   //todo 待完成
-  console.log("个人中心")
+  console.log('个人中心')
 }
 </script>
 <style scoped>

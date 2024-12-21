@@ -166,6 +166,11 @@ const columns = [
     dataIndex: 'reviewMessage',
   },
   {
+    title: '空间 id',
+    dataIndex: 'spaceId',
+    width: 80,
+  },
+  {
     title: '用户 id',
     dataIndex: 'userId',
     width: 80,
@@ -211,6 +216,7 @@ const pagination = computed(() => {
 const fetchData = async () => {
   const res = await listPictureByPageUsingPost({
     ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.data) {
     dataList.value = res.data.data.records ?? []

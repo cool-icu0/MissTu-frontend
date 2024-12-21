@@ -24,8 +24,10 @@ import { uploadPictureUsingPost } from '@/api/pictureController.ts'
 
 interface Props {
   picture?: API.PictureVO
+  spaceId?: number
   onSuccess?: (newPicture: API.PictureVO) => void
 }
+
 const props = defineProps<Props>()
 
 const loading = ref<boolean>(false)
@@ -37,7 +39,8 @@ const loading = ref<boolean>(false)
 const handleUpload = async ({ file }: any) => {
   loading.value = true
   try {
-    const params = props.picture ? { id: props.picture.id } : {}
+    const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
+    params.spaceId = props.spaceId
     const res = await uploadPictureUsingPost(params, {}, file)
     if (res.data.code === 0 && res.data.data) {
       message.success('图片上传成功')
@@ -66,7 +69,6 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
 }
 </script>
 <style scoped>
-
 .picture-upload :deep(.ant-upload) {
   width: 100% !important;
   height: 100% !important;
