@@ -3,9 +3,13 @@
     <a-flex justify="space-between">
       <h2>图片管理</h2>
       <a-space>
-        <a-button type="primary" href="/add_picture" target="_blank">+ 创建图片</a-button>
-        <a-button type="primary" href="/add_picture/batch" target="_blank" ghost
-          >+ 批量创建图片
+        <a-button type="primary" href="/add_picture">
+          <PlusCircleOutlined />
+          创建图片
+        </a-button>
+        <a-button type="primary" href="/add_picture/batch" ghost>
+          <PlusCircleTwoTone />
+          批量创建图片
         </a-button>
       </a-space>
     </a-flex>
@@ -113,13 +117,18 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
+import { PlusCircleTwoTone, PlusCircleOutlined } from '@ant-design//icons-vue'
 import {
   deletePictureUsingPost,
   doPictureReviewUsingPost,
-  listPictureByPageUsingPost
+  listPictureByPageUsingPost,
 } from '@/api/pictureController.ts'
 import dayjs from 'dayjs'
-import { PIC_REVIEW_STATUS_ENUM, PIC_REVIEW_STATUS_MAP, PIC_REVIEW_STATUS_OPTIONS } from '../../constants/picture.ts'
+import {
+  PIC_REVIEW_STATUS_ENUM,
+  PIC_REVIEW_STATUS_MAP,
+  PIC_REVIEW_STATUS_OPTIONS,
+} from '../../constants/picture.ts'
 
 const columns = [
   {
@@ -245,7 +254,8 @@ const doDelete = async (id: number) => {
 }
 
 const handleReview = async (record: API.Picture, reviewStatus: number) => {
-  const reviewMessage = reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS ? '管理员操作通过' : '管理员操作拒绝'
+  const reviewMessage =
+    reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS ? '管理员操作通过' : '管理员操作拒绝'
   const res = await doPictureReviewUsingPost({
     id: record.id,
     reviewStatus,

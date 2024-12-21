@@ -44,6 +44,7 @@
                 :alt="picture.name"
                 :src="picture.thumbnailUrl ?? picture.url"
                 style="height: 180px; object-fit: cover"
+                loading="lazy"
               />
             </template>
             <a-card-meta :title="picture.name">
