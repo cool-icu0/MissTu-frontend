@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '@/views/Home.vue'
-import UserLoginPage from '@/views/user/UserLogin.vue'
-import UserRegisterPage from '@/views/user/UserRegister.vue'
-import UserManagePage from '@/views/admin/UserManage.vue'
-import AddPicturePage from '@/views/picture/AddPicture.vue'
-import PictureManagePage from '@/views/picture/PictureManage.vue'
-import PictureDetailPage from '@/views/picture/PictureDetail.vue'
-import AddPictureBatchPage from '@/views/picture/AddPictureBatchPage.vue'
-import SpaceManagePage from '@/views/space/SpaceManage.vue'
-import AddSpacePage from '@/views/space/AddSpace.vue'
-import SpaceDetailPage from '@/views/space/SpaceDetail.vue'
-import UserSpacePage from '@/views/space/UserSpace.vue'
+import Home from '@/views/Home.vue'
+import UserLogin from '@/views/user/UserLogin.vue'
+import UserRegister from '@/views/user/UserRegister.vue'
+import UserManage from '@/views/admin/UserManage.vue'
+import AddPicture from '@/views/picture/AddPicture.vue'
+import PictureManage from '@/views/picture/PictureManage.vue'
+import PictureDetail from '@/views/picture/PictureDetail.vue'
+import SpaceManage from '@/views/space/SpaceManage.vue'
+import AddSpace from '@/views/space/AddSpace.vue'
+import SpaceDetail from '@/views/space/SpaceDetail.vue'
+import UserSpace from '@/views/space/UserSpace.vue'
+import AddPictureBatch from '@/views/picture/AddPictureBatch.vue'
+import SearchPicture from '@/views/picture/SearchPicture.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,64 +19,69 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomePage,
+      component: Home,
     },
     {
       path: '/user/login',
       name: '用户登录',
-      component: UserLoginPage,
+      component: UserLogin,
     },
     {
       path: '/user/register',
       name: '用户注册',
-      component: UserRegisterPage,
+      component: UserRegister,
     },
     {
       path: '/admin/userManage',
       name: '用户管理',
-      component: UserManagePage,
+      component: UserManage,
     },
     {
       path: '/add_picture',
       name: '创建图片',
-      component: AddPicturePage,
+      component: AddPicture,
     },
     {
       path: '/admin/pictureManage',
       name: '图片管理',
-      component: PictureManagePage,
+      component: PictureManage,
     },
     {
       path: '/picture/:id',
       name: '图片详情',
-      component: PictureDetailPage,
+      component: PictureDetail,
       props: true,
     },
     {
       path: '/add_picture/batch',
       name: '批量创建图片',
-      component: AddPictureBatchPage,
+      component: AddPictureBatch,
     },
     {
       path: '/admin/spaceManage',
       name: '空间管理',
-      component: SpaceManagePage,
+      component: SpaceManage,
     },
     {
       path: '/add_space',
       name: '创建空间',
-      component: AddSpacePage,
+      component: AddSpace,
     },
     {
       path: '/my_space',
       name: '我的空间',
-      component: UserSpacePage,
+      component: UserSpace,
     },
     {
       path: '/space/:id',
       name: '空间详情',
-      component: SpaceDetailPage,
+      component: SpaceDetail,
       props: true,
+    },
+    {
+      path: '/search_picture',
+      name: '图片搜索',
+      component: SearchPicture,
     },
   ],
 })

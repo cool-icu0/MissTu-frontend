@@ -36,12 +36,13 @@ const loading = ref<boolean>(false)
  * 上传
  * @param file
  */
-const handleUpload = async ({ file }: any) => {
+const handleUpload = async ({ file }) => {
   loading.value = true
   try {
     const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
     params.spaceId = props.spaceId
     const res = await uploadPictureUsingPost(params, {}, file)
+    console.log('res', res.data)
     if (res.data.code === 0 && res.data.data) {
       message.success('图片上传成功')
       // 将上传成功的图片信息传递给父组件
