@@ -1,18 +1,5 @@
 <template>
   <div id="pictureManagePage">
-    <a-flex justify="space-between">
-      <h2>图片管理</h2>
-      <a-space>
-        <a-button type="primary" href="/add_picture">
-          <PlusCircleOutlined />
-          创建图片
-        </a-button>
-        <a-button type="primary" href="/add_picture/batch" ghost>
-          <PlusCircleTwoTone />
-          批量创建图片
-        </a-button>
-      </a-space>
-    </a-flex>
     <div style="margin-bottom: 16px" />
     <!-- 搜索表单 -->
     <a-form layout="inline" :model="searchParams" @finish="doSearch">
@@ -48,6 +35,22 @@
         <a-button type="primary" html-type="submit">搜索</a-button>
       </a-form-item>
     </a-form>
+
+    <!--按钮区域-->
+    <a-flex justify="space-between">
+      <h2>图片管理</h2>
+      <a-space>
+        <a-button type="primary" href="/add_picture">
+          <PlusCircleOutlined />
+          创建图片
+        </a-button>
+        <a-button type="primary" href="/add_picture/batch" ghost>
+          <PlusCircleTwoTone />
+          批量创建图片
+        </a-button>
+      </a-space>
+    </a-flex>
+
     <div style="margin-bottom: 16px" />
     <!-- 表格 -->
     <a-table
@@ -58,7 +61,7 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'url'">
-          <a-image :src="record.url" :width="120" />
+          <a-image :src="record.url" :width="100" :height="100" style="object-fit: cover" />
         </template>
         <!-- 标签 -->
         <template v-if="column.dataIndex === 'tags'">
@@ -103,9 +106,7 @@
             >
               拒绝
             </a-button>
-            <a-button type="link" :href="`/add_picture?id=${record.id}`" target="_blank"
-              >编辑
-            </a-button>
+            <a-button type="link" :href="`/add_picture?id=${record.id}`">编辑</a-button>
             <a-button type="link" danger @click="doDelete(record.id)">删除</a-button>
           </a-space>
         </template>
@@ -128,7 +129,7 @@ import {
   PIC_REVIEW_STATUS_ENUM,
   PIC_REVIEW_STATUS_MAP,
   PIC_REVIEW_STATUS_OPTIONS,
-} from '../../constants/picture.ts'
+} from '@/constants/picture.ts'
 
 const columns = [
   {
@@ -139,6 +140,7 @@ const columns = [
   {
     title: '图片',
     dataIndex: 'url',
+    width:120
   },
   {
     title: '名称',
@@ -188,10 +190,19 @@ const columns = [
     key: 'action',
   },
 ]
+type PageType = {
+  current: number
+  pageSize: number
+}
+
+interface ResponseData {
+  records: API.Picture[]
+  total: number
+}
 
 // 数据
-const dataList = ref([])
-const total = ref(0)
+const dataList = ref<ResponseData['records']>([])
+const total = ref<ResponseData['total']>(0)
 
 // 搜索条件
 const searchParams = reactive<API.PictureQueryRequest>({
@@ -208,7 +219,7 @@ const pagination = computed(() => {
     pageSize: searchParams.pageSize ?? 10,
     total: total.value,
     showSizeChanger: true,
-    showTotal: (total) => `共 ${total} 条`,
+    showTotal: (total:number) => `共 ${total} 条`,
   }
 })
 
@@ -220,7 +231,7 @@ const fetchData = async () => {
   })
   if (res.data.data) {
     dataList.value = res.data.data.records ?? []
-    total.value = res.data.data.total ?? 0
+    total.value = Number(res.data.data.total) ?? 0
   } else {
     message.error('获取数据失败，' + res.data.message)
   }
@@ -239,7 +250,7 @@ const doSearch = () => {
 }
 
 // 表格变化处理
-const doTableChange = (page: any) => {
+const doTableChange = (page: PageType) => {
   searchParams.current = page.current
   searchParams.pageSize = page.pageSize
   fetchData()
@@ -253,7 +264,7 @@ const doDelete = async (id: number) => {
   if (res.data.code === 0) {
     message.success('删除成功')
     // 刷新数据
-    fetchData()
+    await fetchData()
   } else {
     message.error('删除失败')
   }
@@ -270,7 +281,7 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
   if (res.data.code === 0) {
     message.success('审核操作成功')
     // 重新获取列表
-    fetchData()
+    await fetchData()
   } else {
     message.error('审核操作失败，' + res.data.message)
   }

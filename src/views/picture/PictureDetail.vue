@@ -116,15 +116,20 @@ const picture = ref<API.PictureVO>({})
 const fetchPictureDetail = async () => {
   try {
     const res = await getPictureVoByIdUsingGet({
-      id: props.id,
+      id: Number(props.id),
     })
     if (res.data.code === 0 && res.data.data) {
       picture.value = res.data.data
     } else {
       message.error('获取图片详情失败，' + res.data.message)
     }
-  } catch (e: any) {
-    message.error('获取图片详情失败：' + e.message)
+  } catch (e) {
+    if (e instanceof Error) {
+      message.error(`获取图片详情失败：${e.message}`);
+    } else {
+      // 处理非 Error 类型的错误，或者直接抛出
+      message.error(`获取图片详情失败：${e}`);
+    }
   }
 }
 

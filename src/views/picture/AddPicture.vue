@@ -84,8 +84,8 @@ const route = useRoute()
  * 提交表单
  * @param values
  */
-const handleSubmit = async (values: any) => {
-  const pictureId = picture.value.id
+const handleSubmit = async (values) => {
+  const pictureId = Number(picture.value.id)
   if (!pictureId) {
     return
   }
