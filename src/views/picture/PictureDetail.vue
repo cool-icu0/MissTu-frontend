@@ -116,7 +116,7 @@ const picture = ref<API.PictureVO>({})
 const fetchPictureDetail = async () => {
   try {
     const res = await getPictureVoByIdUsingGet({
-      id: Number(props.id),
+      id: props.id,
     })
     if (res.data.code === 0 && res.data.data) {
       picture.value = res.data.data

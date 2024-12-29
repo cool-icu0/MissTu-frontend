@@ -13,6 +13,8 @@
         <div class="ant-upload-text">点击或拖拽上传图片</div>
       </div>
     </a-upload>
+
+    <ImageCropper imageUrl="https://avatars2.githubusercontent.com/u/15681693?s=460&v=4" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -21,6 +23,7 @@ import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import type { UploadProps } from 'ant-design-vue'
 import { uploadPictureUsingPost } from '@/api/pictureController.ts'
+import ImageCropper from '@/components/picture/ImageCropper.vue'
 
 interface Props {
   picture?: API.PictureVO
@@ -56,6 +59,8 @@ const handleUpload = async ({ file }) => {
     loading.value = false
   }
 }
+
+
 
 const beforeUpload = (file: UploadProps['fileList'][number]) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'

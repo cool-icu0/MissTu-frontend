@@ -77,8 +77,8 @@ const fetchSpaceDetail = async () => {
     } else {
       message.error('获取空间详情失败，' + res.data.message)
     }
-  } catch (e: any) {
-    message.error('获取空间详情失败：' + e.message)
+  } catch (e) {
+    message.error('获取空间详情失败：' + e)
   }
 }
 onMounted(() => {

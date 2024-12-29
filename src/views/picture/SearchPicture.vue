@@ -55,7 +55,7 @@ const picture = ref<API.PictureVO>({})
 const fetchPictureDetail = async () => {
   try {
     const res = await getPictureVoByIdUsingGet({
-      id: Number(pictureId.value),
+      id: pictureId.value,
     })
     if (res.data.code === 0 && res.data.data) {
       picture.value = res.data.data
@@ -83,7 +83,7 @@ const fetchResultData = async () => {
   try {
     // console.log("pictureId.value：",pictureId.value)
     const res = await searchPictureByPictureUsingPost({
-      pictureId: Number(pictureId.value),
+      pictureId: pictureId.value,
     })
     if (res.data.code === 0 && res.data.data) {
       dataList.value = res.data.data ?? []

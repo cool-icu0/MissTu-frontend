@@ -85,7 +85,7 @@ const route = useRoute()
  * @param values
  */
 const handleSubmit = async (values) => {
-  const pictureId = Number(picture.value.id)
+  const pictureId = picture.value.id
   if (!pictureId) {
     return
   }
