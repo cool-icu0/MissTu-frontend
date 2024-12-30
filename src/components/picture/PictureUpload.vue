@@ -13,8 +13,6 @@
         <div class="ant-upload-text">点击或拖拽上传图片</div>
       </div>
     </a-upload>
-
-    <ImageCropper imageUrl="https://avatars2.githubusercontent.com/u/15681693?s=460&v=4" />
   </div>
 </template>
 <script lang="ts" setup>
