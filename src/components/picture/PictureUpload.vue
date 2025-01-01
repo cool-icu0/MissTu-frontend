@@ -21,7 +21,6 @@ import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import type { UploadProps } from 'ant-design-vue'
 import { uploadPictureUsingPost } from '@/api/pictureController.ts'
-import ImageCropper from '@/components/picture/ImageCropper.vue'
 
 interface Props {
   picture?: API.PictureVO

@@ -30,39 +30,31 @@
     </div>
   </a-modal>
 </template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { uploadPictureUsingPost } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
-
 interface Props {
   imageUrl?: string
   picture?: API.PictureVO
   spaceId?: number
   onSuccess?: (newPicture: API.PictureVO) => void
 }
-
 const props = defineProps<Props>()
-
 // 获取图片裁切器的引用
 const cropperRef = ref()
-
 // 缩放比例
 const changeScale = (num) => {
   cropperRef.value?.changeScale(num)
 }
-
 // 向左旋转
 const rotateLeft = () => {
   cropperRef.value.rotateLeft()
 }
-
 // 向右旋转
 const rotateRight = () => {
   cropperRef.value.rotateRight()
 }
-
 // 确认裁切
 const handleConfirm = () => {
   cropperRef.value.getCropBlob((blob: Blob) => {
@@ -73,9 +65,7 @@ const handleConfirm = () => {
     handleUpload({ file })
   })
 }
-
 const loading = ref(false)
-
 /**
  * 上传图片
  * @param file
@@ -100,31 +90,25 @@ const handleUpload = async ({ file }: any) => {
   }
   loading.value = false
 }
-
 // 是否可见
 const visible = ref(false)
-
 // 打开弹窗
 const openModal = () => {
   visible.value = true
 }
-
 // 关闭弹窗
 const closeModal = () => {
   visible.value = false
 }
-
 // 暴露函数给父组件
 defineExpose({
   openModal,
 })
 </script>
-
 <style>
 .image-cropper {
   text-align: center;
 }
-
 .image-cropper .vue-cropper {
   height: 400px !important;
 }
