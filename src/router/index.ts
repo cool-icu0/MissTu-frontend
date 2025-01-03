@@ -12,6 +12,7 @@ import SpaceDetail from '@/views/space/SpaceDetail.vue'
 import UserSpace from '@/views/space/UserSpace.vue'
 import AddPictureBatch from '@/views/picture/AddPictureBatch.vue'
 import SearchPicture from '@/views/picture/SearchPicture.vue'
+import SpaceAnalyze from '@/views/space/SpaceAnalyze.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,6 +84,11 @@ const router = createRouter({
       name: '图片搜索',
       component: SearchPicture,
     },
+    {
+      path: '/space_analyze',
+      name: '空间分析',
+      component: SpaceAnalyze,
+    }
   ],
 })
 export default router
