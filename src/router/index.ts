@@ -13,6 +13,7 @@ import UserSpace from '@/views/space/UserSpace.vue'
 import AddPictureBatch from '@/views/picture/AddPictureBatch.vue'
 import SearchPicture from '@/views/picture/SearchPicture.vue'
 import SpaceAnalyze from '@/views/space/SpaceAnalyze.vue'
+import SpaceUserManage from '@/views/spaceuser/SpaceUserManage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -88,7 +89,13 @@ const router = createRouter({
       path: '/space_analyze',
       name: '空间分析',
       component: SpaceAnalyze,
-    }
+    },
+    {
+      path: '/spaceUserManage/:id',
+      name: '空间成员管理',
+      component: SpaceUserManage,
+      props: true,
+    },
   ],
 })
 export default router

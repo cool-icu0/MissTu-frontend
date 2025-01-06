@@ -17,4 +17,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    port: 5173, // 设置开发服务器的端口号
+    // host: '127.0.0.1', // 设置开发服务器的主机地址
+  },
 })
