@@ -96,7 +96,6 @@ import { computed, h, onMounted, ref } from 'vue'
 import { deletePictureUsingPost, getPictureVoByIdUsingGet } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
 import { downloadImage, formatSize, toHexColor } from '@/utils'
-import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 import router from '@/router'
 import {
   ShareAltOutlined,

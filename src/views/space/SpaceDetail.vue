@@ -19,6 +19,7 @@
         <a-button
           type="primary"
           ghost
+          v-if="canManageSpaceUser"
           :icon="h(BarChartOutlined)"
           :href="`/space_analyze?spaceId=${id}`"
         >
