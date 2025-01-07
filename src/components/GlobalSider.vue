@@ -47,8 +47,6 @@ import { listSpaceVoByPageUsingPost } from '@/api/spaceController.ts'
 
 const collapsed = ref<boolean>(false)
 const loginUserStore = useLoginUserStore()
-
-const loginUser = loginUserStore.loginUser
 // 菜单项
 const fixedMenuItems = [
   {
@@ -62,9 +60,19 @@ const fixedMenuItems = [
   //   icon: () => h(UserOutlined),
   // },
   {
-    key: '/add_space?type=' + SPACE_TYPE_ENUM.TEAM,
-    label: '创建团队',
+    key: '/add_space',
+    label: '创建空间',
     icon: () => h(TeamOutlined),
+    children: [
+      {
+        key: '/add_space?type=' + SPACE_TYPE_ENUM.TEAM,
+        label: '创建团队空间',
+      },
+      {
+        key: '/add_space?type=' + SPACE_TYPE_ENUM.PRIVATE,
+        label: '创建私有空间',
+      },
+    ],
   },
 ]
 
@@ -127,7 +135,6 @@ const menuItems = computed(() => {
     key: 'privateSpace',
     children: privateSpaceSubMenus,
   }
-
   return [...fixedMenuItems,privateSpaceMenuGroup, teamSpaceMenuGroup]
 })
 
@@ -143,7 +150,7 @@ const fetchTeamSpaceList = async () => {
 // 加载私有空间列表
 const fetchprivateSpaceList = async ()=>{
   const res = await listSpaceVoByPageUsingPost({
-    userId: loginUser.id,
+    userId: loginUserStore.loginUser.id,
     current: 1,
     pageSize: 19,
     spaceType:SPACE_TYPE_ENUM.PRIVATE,
@@ -151,7 +158,7 @@ const fetchprivateSpaceList = async ()=>{
   if (res.data.code === 0 && res.data.data) {
     privateSpaceList.value = res.data.data?.records
   } else {
-    message.error('加载我的团队空间失败，' + res.data.message)
+    message.error('加载我的私有空间失败，' + res.data.message)
   }
 }
 
