@@ -23,6 +23,12 @@
       <a-menu
         v-model:selectedKeys="current"
         mode="inline"
+        :items="fixedMenuItems"
+        @click="doMenuClick"
+      />
+      <a-menu
+        v-model:selectedKeys="current"
+        mode="inline"
         :items="menuItems"
         @click="doMenuClick"
       />
@@ -54,11 +60,6 @@ const fixedMenuItems = [
     icon: () => h(PictureOutlined),
     label: '公共图库',
   },
-  // {
-  //   key: '/my_space',
-  //   label: '我的空间',
-  //   icon: () => h(UserOutlined),
-  // },
   {
     key: '/add_space',
     label: '创建空间',
@@ -104,10 +105,6 @@ const teamSpaceList = ref<API.SpaceUserVO[]>([])
 const privateSpaceList = ref<API.SpaceVO[]>([])
 
 const menuItems = computed(() => {
-  // 没有团队空间或私有空间，只展示固定菜单
-  if (teamSpaceList.value.length < 1 && privateSpaceList.value.length < 1) {
-    return fixedMenuItems
-  }
   // 展示团队和私有空间分组
   const teamSpaceSubMenus = teamSpaceList.value.map((spaceUser) => {
     const space = spaceUser.space
@@ -118,9 +115,12 @@ const menuItems = computed(() => {
   })
   const teamSpaceMenuGroup = {
     type: 'group',
-    label: '我的团队',
+    label: '我的团队空间',
     key: 'teamSpace',
-    children: teamSpaceSubMenus,
+    children: teamSpaceSubMenus.length > 0 ? teamSpaceSubMenus : [{
+      label: '无团队空间',
+      disabled: true,
+    }],
   }
 
   const privateSpaceSubMenus = privateSpaceList.value.map((item) => {
@@ -133,16 +133,27 @@ const menuItems = computed(() => {
     type: 'group',
     label: '我的私有空间',
     key: 'privateSpace',
-    children: privateSpaceSubMenus,
+    children: privateSpaceSubMenus.length > 0 ? privateSpaceSubMenus : [{
+      label: '无私有空间',
+      disabled: true,
+    }],
   }
-  return [...fixedMenuItems,privateSpaceMenuGroup, teamSpaceMenuGroup]
+  const mySpaceMenu = {
+    key: '/my_space',
+    label: '我的空间',
+    icon: () => h(UserOutlined),
+    children: [privateSpaceMenuGroup, teamSpaceMenuGroup],
+  }
+
+  return [mySpaceMenu]
+  // return [privateSpaceMenuGroup, teamSpaceMenuGroup]
 })
 
 // 加载团队空间列表
 const fetchTeamSpaceList = async () => {
   const res = await listMyTeamSpaceUsingPost()
   if (res.data.code === 0 && res.data.data) {
-    teamSpaceList.value = res.data.data
+    teamSpaceList.value = res.data.data || []
   } else {
     message.error('加载我的团队空间失败，' + res.data.message)
   }
@@ -156,7 +167,7 @@ const fetchprivateSpaceList = async ()=>{
     spaceType:SPACE_TYPE_ENUM.PRIVATE,
   })
   if (res.data.code === 0 && res.data.data) {
-    privateSpaceList.value = res.data.data?.records
+    privateSpaceList.value = res.data.data?.records || []
   } else {
     message.error('加载我的私有空间失败，' + res.data.message)
   }

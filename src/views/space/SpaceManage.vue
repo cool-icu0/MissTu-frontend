@@ -48,6 +48,7 @@
       @change="doTableChange"
     >
       <template #bodyCell="{ column, record }">
+        <!--空间级别-->
         <template v-if="column.dataIndex === 'spaceLevel'">
           <div>{{ SPACE_LEVEL_MAP[record.spaceLevel] }}</div>
         </template>
@@ -55,25 +56,46 @@
         <template v-if="column.dataIndex === 'spaceType'">
           <a-tag>{{ SPACE_TYPE_MAP[record.spaceType] }}</a-tag>
         </template>
-        <template v-if="column.dataIndex === 'spaceUseInfo'">
-          <div>大小：{{ formatSize(record.totalSize) }} / {{ formatSize(record.maxSize) }}</div>
-          <div>数量：{{ record.totalCount }} / {{ record.maxCount }}</div>
-        </template>
-        <template v-if="column.dataIndex === 'createTime'">
-          {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
-        </template>
-        <template v-if="column.dataIndex === 'editTime'">
-          {{ dayjs(record.editTime).format('YYYY-MM-DD HH:mm:ss') }}
-        </template>
         <template v-else-if="column.key === 'action'">
           <a-space wrap>
-            <a-button type="primary" :href="`/space_analyze?spaceId=${record.id}`"> 分析 </a-button>
-            <a-button type="primary" :href="`/add_space?id=${record.id}`"> 编辑 </a-button>
+            <a-button type="primary" @click="openDrawer(record)">查看详细</a-button>
+            <a-button type="primary" :href="`/space_analyze?spaceId=${record.id}`"> 分析</a-button>
+            <a-button type="primary" :href="`/add_space?id=${record.id}`"> 编辑</a-button>
             <a-button danger @click="doDelete(record.id)">删除</a-button>
           </a-space>
         </template>
       </template>
     </a-table>
+    <!-- 抽屉 -->
+    <a-drawer title="详细信息" :visible="drawerVisible" @close="drawerVisible = false" width="30%">
+      <div>
+        <a-descriptions title="空间信息" bordered layout="vertical">
+          <a-descriptions-item label="空间名称">
+            {{ currentRecord?.spaceName }}
+          </a-descriptions-item>
+          <a-descriptions-item label="空间级别">
+            {{SPACE_LEVEL_MAP[currentRecord?.spaceLevel] }}
+         </a-descriptions-item>
+          <a-descriptions-item label="空间类别">
+            <a-tag>{{ SPACE_TYPE_MAP[currentRecord?.spaceType] }}</a-tag>
+          </a-descriptions-item>
+          <a-descriptions-item label="用户 id">{{ currentRecord?.userId }}</a-descriptions-item>
+          <a-descriptions-item label="创建时间"
+            >{{ dayjs(currentRecord?.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+          </a-descriptions-item>
+          <a-descriptions-item label="修改时间"
+            >{{ dayjs(currentRecord?.editTime).format('YYYY-MM-DD HH:mm:ss') }}
+          </a-descriptions-item>
+          <a-descriptions-item label="空间使用信息">
+            <div>
+              大小：{{ formatSize(currentRecord?.totalSize) }} /
+              {{ formatSize(currentRecord?.maxSize) }}
+            </div>
+            <div>数量：{{ currentRecord?.totalCount }} / {{ currentRecord?.maxCount }}</div>
+          </a-descriptions-item>
+        </a-descriptions>
+      </div>
+    </a-drawer>
   </div>
 </template>
 <script lang="ts" setup>
@@ -81,43 +103,38 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { deleteSpaceUsingPost, listSpaceByPageUsingPost } from '@/api/spaceController.ts'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
-import { SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS, SPACE_TYPE_MAP, SPACE_TYPE_OPTIONS } from '@/constants/space.ts'
+import {
+  SPACE_LEVEL_MAP,
+  SPACE_LEVEL_OPTIONS,
+  SPACE_TYPE_MAP,
+  SPACE_TYPE_OPTIONS,
+} from '@/constants/space.ts'
 import { formatSize } from '@/utils'
 
 const columns = [
   {
     title: 'id',
     dataIndex: 'id',
-    width: 80,
+    width: 250,
+    align:"center",
   },
   {
     title: '空间名称',
     dataIndex: 'spaceName',
+    width: 300,
+    align:"center",
   },
   {
     title: '空间级别',
     dataIndex: 'spaceLevel',
+    width: 200,
+    align:"center",
   },
   {
     title: '空间类别',
     dataIndex: 'spaceType',
-  },
-  {
-    title: '使用情况',
-    dataIndex: 'spaceUseInfo',
-  },
-  {
-    title: '用户 id',
-    dataIndex: 'userId',
-    width: 80,
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-  },
-  {
-    title: '编辑时间',
-    dataIndex: 'editTime',
+    width: 200,
+    align:"center",
   },
   {
     title: '操作',
@@ -185,5 +202,13 @@ const doDelete = async (id: string) => {
   } else {
     message.error('删除失败')
   }
+}
+
+const drawerVisible = ref(false)
+const currentRecord = ref<API.Space | null>(null)
+//打开抽屉
+const openDrawer = (record: API.Space) => {
+  currentRecord.value = record
+  drawerVisible.value = true
 }
 </script>
