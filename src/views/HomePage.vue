@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import {
   listPictureTagCategoryUsingGet,
   listPictureVoByPageUsingPost,
@@ -117,7 +117,6 @@ const selectedTagList = ref<boolean[]>([])
 
 /**
  * 获取标签和分类选项
- * @param values
  */
 const getTagCategoryOptions = async () => {
   const res = await listPictureTagCategoryUsingGet()

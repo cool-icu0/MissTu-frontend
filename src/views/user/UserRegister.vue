@@ -1,6 +1,6 @@
 <template>
   <div id="userRegisterPage">
-    <h2 class="title">鱼皮云图库 - 用户注册</h2>
+    <h2 class="title">涂小姐 - 用户注册</h2>
     <div class="desc">企业级智能协同云图库</div>
     <a-form
       :model="formState"
@@ -58,7 +58,7 @@ const router = useRouter()
  * 提交表单
  * @param values
  */
-const handleSubmit = async (values: any) => {
+const handleSubmit = async (values: API.UserRegisterRequest) => {
   // 判断两次输入的密码是否一致
   if (formState.userPassword !== formState.checkPassword) {
     message.error('二次输入的密码不一致')

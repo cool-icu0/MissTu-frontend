@@ -1,6 +1,6 @@
 <template>
   <div id="userLoginPage">
-    <h2 class="title">鱼皮云图库 - 用户登录</h2>
+    <h2 class="title">涂小姐- 用户登录</h2>
     <div class="desc">企业级智能协同云图库</div>
     <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit">
       <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
@@ -45,7 +45,7 @@ const loginUserStore = useLoginUserStore()
  * 提交表单
  * @param values
  */
-const handleSubmit = async (values: any) => {
+const handleSubmit = async (values: API.UserLoginRequest) => {
   const res = await userLoginUsingPost(values)
   // 登录成功，把登录态保存到全局状态中
   if (res.data.code === 0 && res.data.data) {
